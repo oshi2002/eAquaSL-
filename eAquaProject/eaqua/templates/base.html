@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/images (1).jpg' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>eAquaSL</title>
+    <style>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 100%, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 90%, 20);
+            }
+        }
+        .animate-fadeInUp {
+            animation: fadeInUp 1s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-white text-black">
+    {% include 'nav.html' %}
+    
+    {% block content %}
+    <!-- Main content will go here -->
+    {% include 'about.html' %}
+    {% include 'contact.html' %}
+    {% endblock %}
+    
+    {% include 'footer.html' %}
+    
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuBtn = document.getElementById('hamburger-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                
+                // Toggle hamburger icon between bars and X
+                const icon = menuBtn.querySelector('i');
+                if (icon.classList.contains('fa-bars')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        });
+        
+        // Animation for course cards
+        document.addEventListener("DOMContentLoaded", function () {
+            const cards = document.querySelectorAll(".course-card");
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("opacity-100", "translate-y-0");
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            cards.forEach(card => observer.observe(card));
+        });
+    </script>
+</body>
+</html>

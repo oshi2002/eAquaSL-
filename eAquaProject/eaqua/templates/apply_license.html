@@ -1,0 +1,426 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translate3d(0, 100%, 0);
+        }
+
+        to {
+            opacity: 1;
+            transform: translate3d(0, 90%, 20);
+        }
+    }
+
+    .animate-fadeInUp {
+        animation: fadeInUp 1s ease-out;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f4f8;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 850px;
+        margin: 50px auto;
+        background-color: #ffffff;
+        padding: 40px;
+        border-radius: 12px;
+        border: 2px solid #007BFF;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+
+
+    ul {
+        margin-top: 15px;
+        padding-left: 20px;
+        line-height: 1.8;
+        font-size: 16px;
+        color: #333;
+    }
+
+    ul li {
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        color: #007BFF;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    /* a:hover {
+        text-decoration: underline;
+    } */
+
+    .step h2 {
+        color: #111827;
+        margin-bottom: 6px;
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    /* New styles for process toggle */
+    .process-toggle {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    .toggle-btn {
+        padding: 8px 20px;
+        border: 2px solid #007BFF;
+        background: white;
+        color: #007BFF;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .toggle-btn:first-child {
+        border-radius: 6px 0 0 6px;
+        border-right: none;
+    }
+
+    .toggle-btn:last-child {
+        border-radius: 0 6px 6px 0;
+    }
+
+    .toggle-btn.active {
+        background: #007BFF;
+        color: white;
+    }
+</style>
+<br><br><br>
+
+   <!-- New Process Toggle -->
+    <div class="process-toggle">
+        <button id="onlineToggle" class="toggle-btn active font-bold">
+            <i class="fas fa-laptop mr-2"></i> Online Process
+        </button>
+        <button id="physicalToggle" class="toggle-btn font-bold">
+            <i class="fas fa-building mr-2"></i> Physical Process
+        </button>
+    </div>
+
+    <!-- existing process flow container -->
+    <div class="process-flow" style="
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        font-family: 'Segoe UI', sans-serif;
+    ">
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h1 style="color: #1e40af; margin-bottom: 8px; font-weight: bold; font-size: large;">Aquaculture License
+                Application</h1>
+            <p style="color: #4b5563;">Follow this simple 4-step process</p>
+        </div>
+
+        <!-- Online Process (default visible) -->
+        <div id="onlineProcess">
+            <!-- Your existing process chart remains exactly the same -->
+            <div class="chart" style="
+                display: flex;
+                justify-content: space-between;
+                position: relative;
+                margin: 0 auto;
+                width: 100%;
+            ">
+                <!-- Connecting Line -->
+                <div style="
+                    position: absolute;
+                    height: 4px;
+                    background: #d1d5db;
+                    width: 80%;
+                    top: 40px;
+                    left: 10%;
+                    z-index: 1;
+                "></div>
+
+                <!-- Step 1 -->
+                <div class="step" style="
+                    width: 22%;
+                    text-align: center;
+                    z-index: 2;
+                ">
+                    <div style="
+                        background: #3b82f6;
+                        width: 80px;
+                        height: 80px;
+                        border-radius: 50%;
+                        margin: 0 auto 12px;
+                        display: grid;
+                        place-items: center;
+                        color: white;
+                        font-size: 1.8rem;
+                        font-weight: bold;
+                        box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+                    ">1</div>
+                    <h2 style="color: #111827; margin-bottom: 6px;">Register</h2>
+                    <p style="color: #4b5563; font-size: 0.9rem; margin: 0;">
+                        Complete our secure digital form & upload required documents
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step" style="
+                    width: 22%;
+                    text-align: center;
+                    z-index: 2;
+                ">
+                    <div style="
+                        background: #10b981;
+                        width: 80px;
+                        height: 80px;
+                        border-radius: 50%;
+                        margin: 0 auto 12px;
+                        display: grid;
+                        place-items: center;
+                        color: white;
+                        font-size: 1.8rem;
+                        font-weight: bold;
+                        box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+                    ">2</div>
+                    <h2 style="color: #111827; margin-bottom: 6px;">Pay Registration Fees</h2>
+                    <p style="color: #4b5563; font-size: 0.9rem; margin: 0;">
+                        Mobile money or online banking
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step" style="
+                    width: 22%;
+                    text-align: center;
+                    z-index: 2;
+                ">
+                    <div style="
+                        background: #f59e0b;
+                        width: 80px;
+                        height: 80px;
+                        border-radius: 50%;
+                        margin: 0 auto 12px;
+                        display: grid;
+                        place-items: center;
+                        color: white;
+                        font-size: 1.8rem;
+                        font-weight: bold;
+                        box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
+                    ">3</div>
+                    <h2 style="color: #111827; margin-bottom: 6px;">Inspection</h2>
+                    <p style="color: #4b5563; font-size: 0.9rem; margin: 0;">
+                        Farm visits by NAQUDA officers
+                    </p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="step" style="
+                    width: 22%;
+                    text-align: center;
+                    z-index: 2;
+                ">
+                    <div style="
+                        background: #8b5cf6;
+                        width: 80px;
+                        height: 80px;
+                        border-radius: 50%;
+                        margin: 0 auto 12px;
+                        display: grid;
+                        place-items: center;
+                        color: white;
+                        font-size: 1.8rem;
+                        font-weight: bold;
+                        box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
+                    ">4</div>
+                    <h2 style="color: #111827; margin-bottom: 6px;">Approval</h2>
+                    <p style="color: #4b5563; font-size: 0.9rem; margin: 0;">
+                        Download Digital license
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Physical Process (hidden by default) -->
+        <div id="physicalProcess" style="display: none;">
+            <!-- Same structure but with physical process details -->
+            <div class="chart" style="
+                display: flex;
+                justify-content: space-between;
+                position: relative;
+                margin: 0 auto;
+                width: 100%;
+            ">
+                <!-- Connecting Line -->
+                <div style="
+                    position: absolute;
+                    height: 4px;
+                    background: #d1d5db;
+                    width: 80%;
+                    top: 40px;
+                    left: 10%;
+                    z-index: 1;
+                "></div>
+
+                <!-- Step 1 -->
+                <div class="step" style="
+                    width: 22%;
+                    text-align: center;
+                    z-index: 2;
+                ">
+                    <div style="
+                        background: #3b82f6;
+                        width: 80px;
+                        height: 80px;
+                        border-radius: 50%;
+                        margin: 0 auto 12px;
+                        display: grid;
+                        place-items: center;
+                        color: white;
+                        font-size: 1.8rem;
+                        font-weight: bold;
+                        box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+                    ">1</div>
+                    <h2 style="color: #111827; margin-bottom: 6px;">Visit Office</h2>
+                    <p style="color: #4b5563; font-size: 0.9rem; margin: 0;">
+                        Collect forms at NAQUDA office
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step" style="
+                    width: 22%;
+                    text-align: center;
+                    z-index: 2;
+                ">
+                    <div style="
+                        background: #10b981;
+                        width: 80px;
+                        height: 80px;
+                        border-radius: 50%;
+                        margin: 0 auto 12px;
+                        display: grid;
+                        place-items: center;
+                        color: white;
+                        font-size: 1.8rem;
+                        font-weight: bold;
+                        box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+                    ">2</div>
+                    <h2 style="color: #111827; margin-bottom: 6px;">Submit Docs</h2>
+                    <p style="color: #4b5563; font-size: 0.9rem; margin: 0;">
+                        Return completed forms with relevant documents
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step" style="
+                    width: 22%;
+                    text-align: center;
+                    z-index: 2;
+                ">
+                    <div style="
+                        background: #f59e0b;
+                        width: 80px;
+                        height: 80px;
+                        border-radius: 50%;
+                        margin: 0 auto 12px;
+                        display: grid;
+                        place-items: center;
+                        color: white;
+                        font-size: 1.8rem;
+                        font-weight: bold;
+                        box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
+                    ">3</div>
+                    <h2 style="color: #111827; margin-bottom: 6px;">Inspection</h2>
+                    <p style="color: #4b5563; font-size: 0.9rem; margin: 0;">
+                        Physical farm visit by officers
+                    </p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="step" style="
+                    width: 22%;
+                    text-align: center;
+                    z-index: 2;
+                ">
+                    <div style="
+                        background: #8b5cf6;
+                        width: 80px;
+                        height: 80px;
+                        border-radius: 50%;
+                        margin: 0 auto 12px;
+                        display: grid;
+                        place-items: center;
+                        color: white;
+                        font-size: 1.8rem;
+                        font-weight: bold;
+                        box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
+                    ">4</div>
+                    <h2 style="color: #111827; margin-bottom: 6px;">Collection</h2>
+                    <p style="color: #4b5563; font-size: 0.9rem; margin: 0;">
+                        Pick up printed license after the officer approval
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- existing guidelines container -->
+    <div class="container animate-fadeInUp">
+        <h1 class="text-3xl font-bold text-blue-600 mb-4">APPLY FOR THE LICENSE</h1>
+        <h2 class="text-xl font-semibold text-gray-700 mb-4">License Application Guidelines </h2>
+
+        <ul id="onlineGuidelines">
+            <li>✔️ Fill the registration form with accurate personal and farm details.</li><br>
+            <li>📧 Upload relevent documents</li><br>
+            <li>💰 Payment must be made during the registration process.</li><br>
+            <li>🧑‍🌾 Our officers will visit your farm after form submission for inspection.</li><br>
+            <li>✅ Your eligibility for the license will be based on the farm inspection.</li><br>
+            <li>📄 Renew your license after the expireing</li><br>
+            <li>👉 <a href="{% url 'farmer_register_self' %}" style="color: #3b82f6; font-weight: 600;">Register Here..</a></li><br>
+        </ul>
+
+        <ul id="physicalGuidelines" style="display: none;">
+            <li>✔️ Visit your nearest NAQUDA office to collect application forms</li><br>
+            <li>📄 Submit completed forms with required documents in person</li><br>
+            <li>💰 Payment must be made during the registration process.</li><br>
+            <li>🧑‍🌾 Schedule an on-site farm inspection with officers</li><br>
+            <li>🏢 Return to office to collect your printed license certificate</li><br>
+            <li>✅ Renew your license after the expireing</li><br>
+            <li>📍 <a href="https://maps.app.goo.gl/c9xczhAT4nzDZ7gK9?g_st=aw"
+                    style="color: #3b82f6; font-weight: 600;">Find office
+                    locations</a></li><br>
+        </ul>
+    </div>
+    <br><br><br>
+
+<script>
+   
+    // Toggle between online and physical processes
+    document.getElementById('onlineToggle').addEventListener('click', function () {
+        this.classList.add('active');
+        document.getElementById('physicalToggle').classList.remove('active');
+        document.getElementById('onlineProcess').style.display = 'block';
+        document.getElementById('physicalProcess').style.display = 'none';
+        document.getElementById('onlineGuidelines').style.display = 'block';
+        document.getElementById('physicalGuidelines').style.display = 'none';
+    });
+
+    document.getElementById('physicalToggle').addEventListener('click', function () {
+        this.classList.add('active');
+        document.getElementById('onlineToggle').classList.remove('active');
+        document.getElementById('physicalProcess').style.display = 'block';
+        document.getElementById('onlineProcess').style.display = 'none';
+        document.getElementById('physicalGuidelines').style.display = 'block';
+        document.getElementById('onlineGuidelines').style.display = 'none';
+    });
+</script>
+{% endblock %}

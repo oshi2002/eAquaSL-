@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+   
+    <!-- About Section -->
+    <section id="about" class="flex relative justify-center items-center min-h-screen">
+        <!-- Background Image -->
+        <img src="{% static 'images/pexels-quang-nguyen-vinh-222549-2582685.jpg' %}" alt="Background"
+            class="object-cover absolute inset-0 w-full h-full opacity-40">
+
+        <!-- Content Wrapper -->
+        <div class="relative w-full bg-opacity-80">
+            <!-- Header -->
+            <header class="py-12 text-center text-black transition-colors duration-300 hover:text-yellow-400">
+                <h1
+                    class="text-4xl font-bold transition-opacity duration-1000 ease-in-out animate-fade-in hover:scale-105">
+                    About eAqua SL</h1>
+            </header>
+
+            <!-- Mission Section -->
+            <section class="px-4 py-12 text-center hover:text-yellow-400">
+                <h2
+                    class="text-2xl font-bold transition-colors duration-300 ease-in-out animate-fade-in hover:scale-105">
+                    Our Mission</h2>
+                <p
+                    class="text-bold mx-auto mt-4 max-w-2xl text-gray-800 transition-colors duration-300 ease-in-out hover:text-black-800 animate-fade-in hover:scale-105">
+                    Our mission is to streamline the aquaculture licensing process in Sri Lanka by providing an
+                    efficient,
+                    transparent, and user-friendly platform. We aim to empower local farmers and stakeholders by
+                    digitizing
+                    services offered by NAQDA, ensuring timely license issuance, data-driven decision-making, and
+                    sustainable aquaculture practices.
+                </p>
+            </section>
+
+            <!-- Vision Section -->
+            <section class="px-4 py-12 text-center text-dark hover:text-yellow-400">
+                <h2 class="text-2xl font-bold transition-colors duration-300 animate-fade-in hover:scale-105 text-dark">Our Vision
+                </h2>
+                <p
+                    class="mx-auto mt-4 max-w-2xl transition-colors duration-300 ease-in-out hover:text-black-800 text-slate-900 animate-fade-in hover:scale-105">
+                    To become Sri Lanka's leading digital platform for aquaculture regulation and support. By closely
+                    aligning
+                    with NAQDA's objectives, eAqua SL envisions a future where technology bridges the gap between
+                    government
+                    officers and aquaculture stakeholders, encouraging growth, compliance, and innovation in the
+                    fisheries sector.
+                </p>
+            </section>
+        </div>
+    </section>
+
+   
+{% endblock %}

@@ -1,0 +1,105 @@
+<!-- Navigation -->
+<nav class="fixed w-full z-50 bg-gradient-to-r from-blue-900 to-blue-1500 shadow-lg">
+    <div class="flex relative z-10 justify-between items-center px-6 py-2 max-w-7xl mx-auto">
+        <!-- Logo -->
+        <div class="flex items-center">
+            {% load static %}
+            <img src="{% static 'images/images (1).jpg' %}"
+                class="h-12 w-auto rounded-full border-2 border-white p-1 shadow-lg" alt="Company Logo" />
+            <span class="ml-3 text-xl font-bold text-white hidden sm:block">eAquaSL</span>
+        </div>
+
+        <!-- Large screen nav -->
+        <ul class="hidden md:flex items-center space-x-8">
+            <li>
+                <a href="{% url 'home' %}"
+                    class="text-white hover:text-cyan-200 px-3 py-2 text-lg font-medium relative group transition duration-300">
+                    Home
+                    <span
+                        class="absolute bottom-0 left-0 h-0.5 bg-cyan-300 w-0 group-hover:w-full transition-all duration-300"></span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="{% url 'about' %}"
+                    class="text-white hover:text-cyan-200 px-3 py-2 text-lg font-medium relative group transition duration-300">
+                    About Us
+                    <span
+                        class="absolute bottom-0 left-0 h-0.5 bg-cyan-300 w-0 group-hover:w-full transition-all duration-300"></span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'contact' %}"
+                    class="text-white hover:text-cyan-200 px-3 py-2 text-lg font-medium relative group transition duration-300">
+                    Contact Us
+                    <span
+                        class="absolute bottom-0 left-0 h-0.5 bg-cyan-300 w-0 group-hover:w-full transition-all duration-300"></span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'applylicense' %}"
+                    class="text-white hover:text-cyan-200 px-3 py-2 text-lg font-medium relative group transition duration-300">
+                    License
+                    <span
+                        class="absolute bottom-0 left-0 h-0.5 bg-cyan-300 w-0 group-hover:w-full transition-all duration-300"></span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- Buttons (Register/Login) -->
+        <div class="hidden md:flex items-center space-x-4">
+            {% if user.is_authenticated %}
+            <div class="relative group">
+                <button class="flex items-center text-white space-x-1">
+                    <i class="fas fa-user-circle text-xl"></i>
+                    <span class="hidden lg:inline">{{ user.username }}</span>
+                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                </button>
+                <div
+                    class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">Dashboard</a>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">Settings</a>
+                    <a href="{% url 'logout' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">Logout</a>
+                </div>
+            </div>
+            {% else %}
+            <a href="{% url 'login' %}"
+                class="px-5 py-2 text-white bg-cyan-800 rounded-lg hover:bg-cyan-700 transition duration-300 shadow-md hover:shadow-lg hover:shadow-cyan-500/30 flex items-center">
+                <i class="fas fa-sign-in-alt mr-2"></i> Log In
+            </a>
+            {% endif %}
+        </div>
+
+        <!-- Hamburger Menu (mobile) -->
+        <div class="md:hidden">
+            <button id="hamburger-btn" class="text-2xl text-white focus:outline-none">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden hidden bg-blue-1500 px-2 py-2">
+        <ul class="space-y-4">
+            <li><a href="{% url 'home' %}" class="block text-white hover:text-cyan-200 text-lg py-2">Home</a></li>
+            <li><a href="{% url 'applylicense' %}"
+                    class="block text-white hover:text-cyan-200 text-lg py-2">License</a></li>
+            <li><a href="#about" class="block text-white hover:text-cyan-200 text-lg py-2">About Us</a></li>
+            <li><a href="#contact" class="block text-white hover:text-cyan-200 text-lg py-2">Contact Us</a></li>
+        </ul>
+        <div class="mt-6 pt-4 border-t border-blue-700">
+            {% if user.is_authenticated %}
+            <a href="#" class="block text-white hover:text-cyan-200 text-lg py-2"><i
+                    class="fas fa-user-circle mr-2"></i> My Account</a>
+            <a href="{% url 'logout' %}" class="block text-white hover:text-cyan-200 text-lg py-2"><i
+                    class="fas fa-sign-out-alt mr-2"></i> Logout</a>
+            {% else %}
+            <a href="{% url 'login' %}"
+                class="block w-full text-center bg-cyan-600 text-white rounded-lg py-2.5 px-4 mb-3 hover:bg-cyan-700">
+                <i class="fas fa-sign-in-alt mr-2"></i> Log In
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</nav>

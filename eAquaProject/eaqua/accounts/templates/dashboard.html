@@ -1,0 +1,938 @@
+<!-- Include Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Include Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+{% extends "base.html" %}
+
+{% block title %}Dashboard - eAqua SL{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <!-- Dashboard Header -->
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-3 mb-4 border-bottom">
+        <div class="d-flex align-items-center">
+            
+            <div>
+                <h2 class="h4 fw-bold mb-0">
+                    {% if user.role == 'admin' %}Admin Dashboard
+                    {% elif user.role == 'officer' %}Officer Dashboard
+                    {% elif user.role == 'farmer' %}Farmer Dashboard
+                    {% endif %}
+                </h2>
+                
+            </div>
+        </div>
+        <div class="btn-toolbar">
+            <div class="btn-group me-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="currentDateBtn">
+                    <i class="fas fa-calendar me-1"></i> <span id="currentDateText"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="location.reload();">
+                    <i class="fas fa-sync-alt me-1"></i> Refresh
+                </button>
+            </div>
+        </div>
+        <!-- Move this script outside of any role-specific blocks -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Display current date - this will run for all users
+    const dateElement = document.getElementById("currentDateText");
+    if (dateElement) {  // Check if element exists
+        const today = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+        dateElement.textContent = today.toLocaleDateString(undefined, options);
+    }
+});
+</script>
+    </div>
+
+    {% if user.role == 'admin' %}
+    <!-- Quick Stats Row -->
+    <div class="row g-4 mb-4">
+        <!-- Pending Approvals -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-start border-warning border-4 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase text-muted mb-2">Pending Approvals</h6>
+                            <h2 class="mb-0">{{ pending_farmers|default:"0" }}</h2>
+                        </div>
+                        <div class="bg-warning bg-opacity-10 p-3 rounded">
+                            <i class="fas fa-user-clock fa-2x text-warning"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="{% url 'manage_users' %}" class="small text-warning text-decoration-none fw-bold">
+                            View Requests <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Farm Status -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-start border-success border-4 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase text-muted mb-2">Farm Status</h6>
+                            <div class="d-flex align-items-center mb-1">
+                                <span class="badge bg-success me-2">Active</span>
+                                <h4 class="mb-0">{{ active_farms|default:"0" }}</h4>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-secondary me-2">Inactive</span>
+                                <h4 class="mb-0">{{ inactive_farms|default:"0" }}</h4>
+                            </div>
+                        </div>
+                        <div class="bg-success bg-opacity-10 p-3 rounded">
+                            <i class="fas fa-tractor fa-2x text-success"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="small text-success text-decoration-none fw-bold">
+                            View Farms <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Licenses -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-start border-primary border-4 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase text-muted mb-2">Total Licenses</h6>
+                            <h2 class="mb-0">{{ total_licenses|default:"0" }}</h2>
+                            <small class="text-muted">{{ approved_licenses|default:"0" }} approved</small>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 p-3 rounded">
+                            <i class="fas fa-file-contract fa-2x text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="small text-primary text-decoration-none fw-bold">
+                            Manage Licenses <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Users -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-start border-info border-4 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase text-muted mb-2">System Users</h6>
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <small class="text-muted">Admins</small>
+                                    <h5 class="mb-0">{{ total_admins|default:"0" }}</h5>
+                                </div>
+                                <div class="me-3">
+                                    <small class="text-muted">Officers</small>
+                                    <h5 class="mb-0">{{ total_officers|default:"0" }}</h5>
+                                </div>
+                                <div>
+                                    <small class="text-muted">Farmers</small>
+                                    <h5 class="mb-0">{{ total_farmers|default:"0" }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-info bg-opacity-10 p-3 rounded">
+                            <i class="fas fa-users fa-2x text-info"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="{% url 'manage_users' %}" class="small text-info text-decoration-none fw-bold">
+                            View Users <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Charts Section -->
+    <div class="row g-4 mb-4">
+        <!-- User Distribution Chart -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-dark"><i class="fas fa-chart-bar text-primary me-2"></i> User Distribution</h5>
+                    <!-- <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="userDistDropdown" data-bs-toggle="dropdown">
+                            <i class="fas fa-calendar me-1"></i> This Year
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDistDropdown">
+                            <li><a class="dropdown-item" href="#">This Week</a></li>
+                            <li><a class="dropdown-item" href="#">This Month</a></li>
+                            <li><a class="dropdown-item" href="#">This Year</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Custom Range</a></li>
+                        </ul>
+                    </div> -->
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="position: relative; height: 300px;">
+                        <canvas id="userDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- License Status -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0 text-dark"><i class="fas fa-file-contract text-success me-2"></i> License Status</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="position: relative; height: 250px;">
+                        <canvas id="licenseStatusChart"></canvas>
+                    </div>
+                    <div class="row mt-3 text-center">
+                        <div class="col-md-4 mb-2 mb-md-0">
+                            <div class="p-2 bg-success bg-opacity-10 rounded">
+                                <small class="d-block text-muted">Approved</small>
+                                <strong class="text-success">{{ approved_licenses|default:"0" }}</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-2 mb-md-0">
+                            <div class="p-2 bg-warning bg-opacity-10 rounded">
+                                <small class="d-block text-muted">Pending</small>
+                                <strong class="text-warning">{{ pending_licenses|default:"0" }}</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-2 bg-danger bg-opacity-10 rounded">
+                                <small class="d-block text-muted">Rejected</small>
+                                <strong class="text-danger">{{ rejected_licenses|default:"0" }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secondary Charts Section -->
+    <div class="row g-4 mb-4">
+        <!-- Monthly Production -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-dark"><i class="fas fa-chart-line text-info me-2"></i> Monthly Production (kg)</h5>
+                    <!-- <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="prodDropdown" data-bs-toggle="dropdown">
+                            <i class="fas fa-filter me-1"></i> 2023
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="prodDropdown">
+                            <li><a class="dropdown-item" href="#">2023</a></li>
+                            <li><a class="dropdown-item" href="#">2022</a></li>
+                            <li><a class="dropdown-item" href="#">2021</a></li>
+                        </ul>
+                    </div> -->
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="position: relative; height: 300px;">
+                        <canvas id="monthlyProductionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Farmer Status -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0 text-dark"><i class="fas fa-users text-warning me-2"></i> Farmer Status</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="chart-container" style="position: relative; height: 250px;">
+                                <canvas id="farmerStatusChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex flex-column h-100 justify-content-center">
+                                <div class="mb-3 p-3 bg-success bg-opacity-10 rounded">
+                                    <div class="d-flex justify-content-between">
+                                        <strong class="text-success">Active Farmers</strong>
+                                        <span class="badge bg-success">{{ active_farmers|default:"0" }}</span>
+                                    </div>
+                                    <small class="text-muted">Registered and approved</small>
+                                </div>
+                                <div class="mb-3 p-3 bg-warning bg-opacity-10 rounded">
+                                    <div class="d-flex justify-content-between">
+                                        <strong class="text-warning">Pending Approval</strong>
+                                        <span class="badge bg-warning">{{ pending_farmers|default:"0" }}</span>
+                                    </div>
+                                    <small class="text-muted">Awaiting verification</small>
+                                </div>
+                                <div class="p-3 bg-danger bg-opacity-10 rounded">
+                                    <div class="d-flex justify-content-between">
+                                        <strong class="text-danger">Suspended</strong>
+                                        <span class="badge bg-danger">{{ suspended_farmers|default:"0" }}</span>
+                                    </div>
+                                    <small class="text-muted">Temporarily inactive</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart Scripts -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Display current date
+        const dateElement = document.getElementById("currentDateText");
+        const today = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+        dateElement.textContent = today.toLocaleDateString(undefined, options);
+
+        // User Distribution Chart
+        const userDistCtx = document.getElementById('userDistributionChart').getContext('2d');
+        new Chart(userDistCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Admins', 'Officers', 'Farmers'],
+                datasets: [{
+                    label: 'User Count',
+                    data: [
+                        {{ total_admins|default:"0" }},
+                        {{ total_officers|default:"0" }},
+                        {{ total_farmers|default:"0" }},
+                    ],
+                    backgroundColor: [
+                        'rgba(13, 110, 253, 0.7)',
+                        'rgba(255, 193, 7, 0.7)',
+                        'rgba(25, 135, 84, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(13, 110, 253, 1)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(25, 135, 84, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.raw} users`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        },
+                        grid: {
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Farmer Status Chart
+        const farmerStatusCtx = document.getElementById('farmerStatusChart').getContext('2d');
+        new Chart(farmerStatusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Active', 'Pending', 'Suspended'],
+                datasets: [{
+                    data: [
+                        {{ active_farmers|default:"0" }},
+                        {{ pending_farmers|default:"0" }},
+                        {{ suspended_farmers|default:"0" }}
+                    ],
+                    backgroundColor: [
+                        'rgba(25, 135, 84, 0.7)',
+                        'rgba(255, 193, 7, 0.7)',
+                        'rgba(220, 53, 69, 0.7)'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            boxWidth: 12,
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    }
+                }
+            }
+        });
+
+        // License Status Chart
+        const licenseStatusCtx = document.getElementById('licenseStatusChart').getContext('2d');
+        new Chart(licenseStatusCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Approved', 'Pending', 'Rejected'],
+                datasets: [{
+                    data: [
+                        {{ approved_licenses|default:"0" }},
+                        {{ pending_licenses|default:"0" }},
+                        {{ rejected_licenses|default:"0" }}
+                    ],
+                    backgroundColor: [
+                        'rgba(25, 135, 84, 0.7)',
+                        'rgba(255, 193, 7, 0.7)',
+                        'rgba(220, 53, 69, 0.7)'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            boxWidth: 12,
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Monthly Production Chart
+        const monthlyProdCtx = document.getElementById('monthlyProductionChart').getContext('2d');
+new Chart(monthlyProdCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [{
+            label: 'Total Fish Production (kg)',
+            data: [12000, 15000, 18000, 21000, 24000, 27000, 30000, 28000, 25000, 22000, 19000, 16000],
+            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1,
+            borderRadius: 4, // Rounded corners for bars
+            hoverBackgroundColor: 'rgba(54, 162, 235, 1)'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    boxWidth: 12,
+                    padding: 20,
+                    font: {
+                        size: 14
+                    }
+                }
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return `Production: ${context.raw.toLocaleString()} kg`;
+                    },
+                    afterLabel: function(context) {
+                        const monthlyAvg = context.dataset.data.reduce((a, b) => a + b, 0) / 12;
+                        const diff = ((context.raw - monthlyAvg) / monthlyAvg * 100).toFixed(1);
+                        const trend = diff >= 0 ? `↑ ${diff}% above average` : `↓ ${Math.abs(diff)}% below average`;
+                        return `Trend: ${trend}`;
+                    }
+                },
+                padding: 10,
+                backgroundColor: 'rgba(0, 0, 0, 0.8)'
+            },
+            title: {
+                display: true,
+                text: 'Monthly Fish Production (2023)',
+                font: {
+                    size: 18
+                },
+                padding: {
+                    bottom: 20
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    drawBorder: false,
+                    color: 'rgba(0, 0, 0, 0.05)'
+                },
+                ticks: {
+                    callback: function(value) {
+                        if (value >= 1000) {
+                            return (value / 1000).toFixed(0) + ' tons';
+                        }
+                        return value + ' kg';
+                    },
+                    font: {
+                        size: 12
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Production Quantity',
+                    font: {
+                        size: 14,
+                        weight: 'bold'
+                    }
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                },
+                ticks: {
+                    font: {
+                        size: 12
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Months',
+                    font: {
+                        size: 14,
+                        weight: 'bold'
+                    }
+                }
+            }
+        },
+        interaction: {
+            intersect: false,
+            mode: 'index'
+        },
+        animation: {
+            duration: 1500,
+            easing: 'easeOutQuart'
+        }
+    }
+});
+        
+    });
+    </script>
+
+    {% elif user.role == 'officer' %}
+    <!-- Officer Dashboard Content -->
+    <div class="row g-4 mb-4">
+        <!-- Pending Approvals Card -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-start border-warning border-4 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase text-muted mb-2">Pending Approvals</h6>
+                            <h2 class="mb-0">{{ pending_farmers.count }}</h2>
+                        </div>
+                        <div class="bg-warning bg-opacity-10 p-3 rounded">
+                            <i class="fas fa-user-clock fa-2x text-warning"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#pending-farmers" class="small text-warning text-decoration-none fw-bold">
+                            View Requests <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scheduled Visits Card -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-start border-info border-4 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase text-muted mb-2">Scheduled Visits</h6>
+                            <h2 class="mb-0">0</h2>
+                        </div>
+                        <div class="bg-info bg-opacity-10 p-3 rounded">
+                            <i class="fas fa-calendar-check fa-2x text-info"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="small text-info text-decoration-none fw-bold">
+                            View Schedule <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Licenses Card -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-start border-primary border-4 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase text-muted mb-2">Pending Licenses</h6>
+                            <h2 class="mb-0">0</h2>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 p-3 rounded">
+                            <i class="fas fa-file-signature fa-2x text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="small text-primary text-decoration-none fw-bold">
+                            Review Licenses <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Farms Card -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-start border-success border-4 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase text-muted mb-2">Active Farms</h6>
+                            <h2 class="mb-0">0</h2>
+                        </div>
+                        <div class="bg-success bg-opacity-10 p-3 rounded">
+                            <i class="fas fa-tractor fa-2x text-success"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="small text-success text-decoration-none fw-bold">
+                            View Farms <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Farmers Table -->
+    <div class="card mt-4" id="pending-farmers">
+        <div class="card-header bg-white">
+            <h5 class="mb-0"><i class="fas fa-user-check me-2"></i>Pending Farmer Approvals</h5>
+        </div>
+        <div class="card-body">
+            {% if pending_farmers %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Registered</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for farmer in pending_farmers %}
+                        <tr>
+                            <td>{{ farmer.get_full_name }}</td>
+                            <td>{{ farmer.email }}</td>
+                            <td>{{ farmer.phone }}</td>
+                            <td>{{ farmer.date_created|date:"M d, Y" }}</td>
+                            <td>
+                                <a href="{% url 'approve_farmer' farmer.id %}" class="btn btn-sm btn-success">
+                                    <i class="fas fa-check me-1"></i> Approve
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info mb-0">
+                <i class="fas fa-info-circle me-2"></i> No farmers pending approval at this time.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% elif user.role == 'farmer' %}
+        {% if user.status == 'active' %}
+        <!-- Active Farmer Dashboard Content -->
+        <div class="row g-4 mb-4">
+            <!-- Total Farms Card -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-start border-primary border-4 h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase text-muted mb-2">Total Farms</h6>
+                                <h2 class="mb-0">3</h2>
+                            </div>
+                            <div class="bg-primary bg-opacity-10 p-3 rounded">
+                                <i class="fas fa-farm fa-2x text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <a href="#" class="small text-primary text-decoration-none fw-bold">
+                                Manage Farms <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Licenses Card -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-start border-success border-4 h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase text-muted mb-2">Active Licenses</h6>
+                                <h2 class="mb-0">2</h2>
+                            </div>
+                            <div class="bg-success bg-opacity-10 p-3 rounded">
+                                <i class="fas fa-file-contract fa-2x text-success"></i>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <a href="#" class="small text-success text-decoration-none fw-bold">
+                                View Licenses <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Production Card -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-start border-info border-4 h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase text-muted mb-2">Monthly Production</h6>
+                                <h2 class="mb-0">Rs.100,000</h2>
+                            </div>
+                            <div class="bg-info bg-opacity-10 p-3 rounded">
+                                <i class="fas fa-chart-line fa-2x text-info"></i>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <a href="#" class="small text-info text-decoration-none fw-bold">
+                                View Reports <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions Card -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-start border-warning border-4 h-100">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-muted mb-3">Quick Actions</h6>
+                        <div class="d-grid gap-2">
+                            <a href="#" class="btn btn-sm btn-outline-primary text-start">
+                                <i class="fas fa-plus-circle me-2"></i> Register Farm
+                            </a>
+                            <a href="#" class="btn btn-sm btn-outline-success text-start">
+                                <i class="fas fa-file-signature me-2"></i> Apply for License
+                            </a>
+                            <a href="#" class="btn btn-sm btn-outline-info text-start">
+                                <i class="fas fa-chart-pie me-2"></i> View Reports
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 text-dark"><i class="fas fa-star me-2"></i>Key Features</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center g-4">
+                    <!-- Feature 1 -->
+                    <div class="col-md-6 col-lg-3">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-user-check fa-3x text-primary"></i>
+                        </div>
+                        <h5>Register & Login</h5>
+                        <p class="text-muted">Create your account and securely access the platform.</p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="col-md-6 col-lg-3">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-file-alt fa-3x text-success"></i>
+                        </div>
+                        <h5>License Application</h5>
+                        <p class="text-muted">Apply for various aquaculture licenses.</p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="col-md-6 col-lg-3">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-chart-bar fa-3x text-info"></i>
+                        </div>
+                        <h5>View Reports</h5>
+                        <p class="text-muted">Access your production reports and analytics.</p>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="col-md-6 col-lg-3">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-sync-alt fa-3x text-warning"></i>
+                        </div>
+                        <h5>License Renewal</h5>
+                        <p class="text-muted">Renew your licenses with ease.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <!-- Pending Approval Farmer Dashboard -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-warning">
+                    <div class="card-header bg-warning text-white">
+                        <h4 class="mb-0"><i class="fas fa-hourglass-half me-2"></i>Account Pending Approval</h4>
+                    </div>
+                    <div class="card-body text-center py-5">
+                        <div class="mb-4">
+                            <i class="fas fa-user-clock fa-5x text-warning"></i>
+                        </div>
+                        <h3 class="mb-3">Your account is under review</h3>
+                        <p class="lead mb-4">
+                            Thank you for registering with eAqua SL. Your account is currently pending approval
+                            by a regulatory officer. You will receive an email notification once your account
+                            has been approved.
+                        </p>
+                        <p class="text-muted mb-4">
+                            If you have any questions, please contact our support team.
+                        </p>
+                        <a href="{% url 'logout' %}" class="btn btn-primary px-4">
+                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    
+    {% endif %}
+</div>
+{% endblock %}
+
+<style>
+.card {
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.075);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.075);
+    padding: 1rem 1.25rem;
+}
+
+.border-start {
+    border-left-width: 4px !important;
+}
+
+.chart-container {
+    position: relative;
+    min-height: 250px;
+}
+
+.dropdown-toggle::after {
+    vertical-align: middle;
+}
+
+.badge {
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+    font-size: 0.75em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .chart-container {
+        min-height: 200px;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+}
+
+/* Animation for cards */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Delay animations for each card */
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.2s; }
+.card:nth-child(3) { animation-delay: 0.3s; }
+.card:nth-child(4) { animation-delay: 0.4s; }
+
+/* Ensure chart canvas has proper dimensions */
+canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+</style>
