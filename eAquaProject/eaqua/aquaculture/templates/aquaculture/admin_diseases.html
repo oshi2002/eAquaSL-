@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Manage Fish Diseases | Admin Panel{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0 d-flex justify-content-between align-items-center">
+                    <h6>Manage Fish Diseases</h6>
+                    <div>
+                        <a href="{% url 'aquaculture:add_disease' %}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus me-1"></i> Add New Disease
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <!-- Search Form -->
+                    <div class="px-4 pt-3">
+                        <form method="get" class="mb-4">
+                            <div class="input-group">
+                                <input type="text" name="q" class="form-control" 
+                                       placeholder="Search diseases..." 
+                                       value="{{ request.GET.q }}">
+                                <button type="submit" class="btn btn-outline-primary mb-0">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                                {% if request.GET.q %}
+                                <a href="{% url 'aquaculture:manage_diseases' %}" class="btn btn-outline-danger mb-0">
+                                    <i class="fas fa-times"></i> Clear
+                                </a>
+                                {% endif %}
+                            </div>
+                            <div class="form-text mt-1">
+                                Search by name of diseases & severity
+                            </div>
+                            
+                        </form>
+                    </div>
+
+                    <!-- Diseases Table -->
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Disease Name</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Severity</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Last Updated</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for disease in diseases %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-sm">{{ disease.name }}</h6>
+                                                <p class="text-xs text-secondary mb-0">
+                                                    {{ disease.symptoms|truncatewords:8 }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge 
+                                            {% if disease.severity == 'High' %}bg-danger
+                                            {% elif disease.severity == 'Medium' %}bg-warning
+                                            {% else %}bg-success{% endif %}">
+                                            {{ disease.severity }}
+                                        </span>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">
+                                            {{ disease.updated_at|date:"M d, Y" }}
+                                        </span>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <a href="{% url 'aquaculture:edit_disease' disease.pk %}" 
+                                           class="btn btn-sm btn-outline-info mx-1" 
+                                           data-toggle="tooltip" 
+                                           title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'aquaculture:delete_disease' disease.pk %}" 
+                                           class="btn btn-sm btn-outline-danger mx-1" 
+                                           data-toggle="tooltip" 
+                                           title="Delete">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center py-4">
+                                        {% if request.GET.q %}
+                                        No diseases found matching "{{ request.GET.q }}"
+                                        {% else %}
+                                        No diseases found. Add your first disease.
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    {% if is_paginated %}
+                    <div class="px-4 pt-3">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                                
+                                {% for num in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == num %}
+                                    <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                                    {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ num }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Initialize tooltips
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+{% endblock %}

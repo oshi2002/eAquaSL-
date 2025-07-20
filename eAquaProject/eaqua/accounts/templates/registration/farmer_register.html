@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block title %}Farmer Registration - eAqua SL{% endblock %}
+
+{% block content %}
+<style>
+    .registration-card {
+        border-radius: 12px;
+        overflow: hidden;
+        border: none;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-header {
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #28a745, #218838);
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        transition: all 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.1);
+    }
+
+    .btn-register {
+        padding: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #28a745, #218838);
+        border: none;
+        transition: all 0.3s;
+    }
+
+    .btn-register:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    }
+
+    .form-icon {
+        color: #28a745;
+        margin-right: 8px;
+    }
+
+    .terms-link {
+        color: #28a745;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .terms-link:hover {
+        text-decoration: underline;
+    }
+
+    .password-hint {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+    }
+
+    .field-group {
+        margin-bottom: 1.5rem;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-10">
+            <div class="card registration-card">
+                <div class="card-header text-white text-center">
+                    <h3 class="mb-0"><i class="fas fa-user-plus me-2"></i>Join eAqua as a Farmer</h3>
+                    <p class="mb-0 mt-2">Create your account to access aquaculture resources</p>
+                </div>
+
+                <div class="card-body p-4 p-lg-5">
+                    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Personal Information Section -->
+                        <div class="mb-4">
+                            <h5 class="text-success mb-3"><i class="fas fa-user-circle me-2"></i>Personal Information</h5>
+
+                            <div class="row field-group">
+                                <div class="col-md-6 mb-3">
+                                    <label for="first_name" class="form-label">
+                                        <i class="fas fa-id-card form-icon"></i>First Name
+                                    </label>
+                                    {{ form.first_name }}
+                                    <div class="invalid-feedback">
+                                        Please provide your first name.
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="last_name" class="form-label">
+                                        <i class="fas fa-id-card form-icon"></i>Last Name
+                                    </label>
+                                    {{ form.last_name }}
+                                    <div class="invalid-feedback">
+                                        Please provide your last name.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row field-group">
+                                <div class="col-md-6 mb-3">
+                                    <label for="username" class="form-label">
+                                        <i class="fas fa-user form-icon"></i>Username
+                                    </label>
+                                    {{ form.username }}
+                                    {% if form.username.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.username.errors }}
+                                    </div>
+                                    <small class="password-hint">Choose a unique username</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information Section -->
+                        <div class="mb-4">
+                            <h5 class="text-success mb-3"><i class="fas fa-address-book me-2"></i>Contact Information</h5>
+
+                            <div class="row field-group">
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label">
+                                        <i class="fas fa-phone form-icon"></i>Phone Number
+                                    </label>
+                                    {{ form.phone }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">
+                                        <i class="fas fa-envelope form-icon"></i>Email
+                                    </label>
+                                    {{ form.email }}
+                                    {% if form.email.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.email.errors }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Security Section -->
+                        <div class="mb-4">
+                            <h5 class="text-success mb-3"><i class="fas fa-lock me-2"></i>Account Information</h5>
+
+                            <div class="row field-group">
+                                <div class="col-md-6 mb-3">
+                                    <label for="password1" class="form-label">
+                                        <i class="fas fa-key form-icon"></i>Password
+                                    </label>
+                                    {{ form.password1 }}
+                                    {% if form.password1.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.password1.errors }}
+                                        <small class="password-hint">At least 8 characters with numbers</small>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="password2" class="form-label">
+                                        <i class="fas fa-key form-icon"></i>Confirm Password
+                                    </label>
+                                    {{ form.password2 }}
+                                    {% if form.password2.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.password2.errors }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-register btn-lg">
+                                <i class="fas fa-user-plus me-2"></i>Create Account
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Example form validation script
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+{% endblock %}

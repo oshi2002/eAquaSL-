@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <!-- Home Section -->
+    <section id="home" class="flex relative justify-center items-center min-h-screen">
+        <!-- Background Video -->
+        <div class="overflow-hidden absolute inset-0 z-0">
+            {% load static %}
+            <video src="{% static 'vedios/eaqua - Made with Clipchamp (1).mp4' %}" autoplay loop muted
+                class="object-cover absolute inset-0 w-full h-full"></video>
+            <div class="absolute inset-0 bg-black/50"></div> <!-- Dark overlay for readability -->
+        </div>
+
+        <!-- Foreground Content -->
+        <div
+            class="flex relative z-10 flex-wrap w-full min-h-screen transition-transform duration-300 ease-in-out hover:scale-105">
+            <div class="flex justify-center items-center p-8 w-full sm:w-8/12 sm:p-16 animate-fadeInUp">
+                <div class="container mx-auto">
+                    <div class="flex justify-between items-center mb-8">
+                        <div
+                            class="text-4xl font-bold text-white transition-transform duration-300 ease-in-out hover:text-yellow-300 animate-fadeInUp hover:scale-105">
+                            eAqua SL<span class="text-yellow-600 transition-colors duration-300">.</span>
+                        </div>
+                    </div>
+                    <header class="p-10 text-center animate-fadeInUp">
+                        <h1
+                            class="text-4xl font-bold text-white transition-all duration-300 lg:text-6xl hover:text-blue-400 animate-fadeInUp">
+                            Empowering <span
+                                class="text-yellow-500 hover:text-black animate-fadeInUp">Aquaculture</span> in Sri
+                            Lanka
+                        </h1>
+                        <div class="mx-auto my-4 w-24 h-2 bg-yellow-500"></div>
+                        <p
+                            class="mb-10 text-xl text-gray-300 transition-all duration-300 hover:text-yellow-200 animate-fadeInUp">
+                            Streamline aquaculture licensing, farm management, and production tracking through a unified
+                            digital platform built for farmers & officers...
+                        </p>
+                        <button
+                            class="px-6 py-3 text-2xl font-medium text-black bg-gray-600 rounded shadow-lg transition-all duration-300 ease-in-out hover:bg-gray-400 hover:text-yellow-300 hover:scale-105 focus:outline-none focus:ring focus:border-yellow-300 animate-fadeInUp">
+                            <a href="#about">Learn More</a>
+                        </button>
+                    </header>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- news and deseases Section -->
+    <section id="notes" class="flex justify-center items-center min-h-screen bg-slate-200">
+        <div class="text-center">
+            <h2 class="text-4xl font-semibold transition-colors duration-300 hover:text-yellow-500">Aquaculture
+                Resources</h2>
+            <p class="mt-4 text-xl text-gray-700">Access important information about fish health or stay updated with
+                the latest aquaculture news.</p>
+
+            <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 lg:grid-cols-2">
+
+                <!-- Fish Health & Diseases Card -->
+                <div
+                    class="w-full max-w-xl p-10 bg-white rounded-lg shadow-lg opacity-0 transition-all duration-700 ease-in-out transform translate-y-6 course-card hover:scale-105 hover:shadow-2xl">
+                    <div class="flex items-center space-x-4">
+                        <i class="text-5xl text-red-600 fas fa-fish"></i>
+                        <h3 class="text-3xl font-semibold transition-colors duration-300 hover:text-blue-500">
+                            Fish Diseases & preventions
+                        </h3>
+                    </div>
+                    <p class="mt-4 text-lg text-gray-600 hover:text-yellow-500">
+                        Learn about common fish diseases, prevention methods, treatment options, and biosecurity
+                        measures.
+                        Identify symptoms and get expert recommendations for maintaining healthy stocks.
+                    </p>
+                    <br>
+                    <a class="px-6 py-3 mt-8 text-lg font-semibold leading-7 text-black rounded-md transition duration-300 ease-in-out bg-slate-500 hover:bg-yellow-500 hover:scale-105 focus:outline-none focus:ring focus:border-yellow-300"
+                        href="{% url 'disease_list' %}">Learn More</a>
+                </div>
+
+                <!-- Check Latest News Card -->
+                <div
+                    class="w-full max-w-xl p-10 bg-white rounded-lg shadow-lg opacity-0 transition-all duration-700 ease-in-out transform translate-y-6 course-card hover:scale-105 hover:shadow-2xl">
+                    <div class="flex items-center space-x-4">
+                        <i class="text-5xl text-blue-600 fas fa-newspaper"></i>
+                        <h3 class="text-3xl font-semibold transition-colors duration-300 hover:text-blue-500">
+                            Aquaculture News
+                        </h3>
+                    </div>
+                    <p class="mt-4 text-lg text-gray-600 hover:text-yellow-500">
+                        Stay updated with the latest aquaculture regulations, technological advancements,
+                        market trends, and official announcements from NAQDA and related authorities.
+                    </p>
+                    <br>
+                    <a class="px-6 py-3 mt-8 text-lg font-semibold leading-7 text-black rounded-md transition duration-300 ease-in-out bg-slate-500 hover:bg-yellow-500 hover:scale-105 focus:outline-none focus:ring focus:border-yellow-300"
+                        href="{% url 'news' %}">Read News</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="flex relative justify-center items-center min-h-screen">
+        <!-- Background Image -->
+        <img src="{% static 'images/pexels-quang-nguyen-vinh-222549-2582685.jpg' %}" alt="Background"
+            class="object-cover absolute inset-0 w-full h-full opacity-40">
+
+        <!-- Content Wrapper -->
+        <div class="relative w-full bg-opacity-80">
+            <!-- Header -->
+            <header class="py-12 text-center text-black transition-colors duration-300 hover:text-yellow-400">
+                <h1
+                    class="text-4xl font-bold transition-opacity duration-1000 ease-in-out animate-fade-in hover:scale-105">
+                    About eAqua SL</h1>
+            </header>
+
+            <!-- Mission Section -->
+            <section class="px-4 py-12 text-center hover:text-yellow-400">
+                <h2
+                    class="text-2xl font-bold transition-colors duration-300 ease-in-out animate-fade-in hover:scale-105">
+                    Our Mission</h2>
+                <p
+                    class="text-bold mx-auto mt-4 max-w-2xl text-gray-800 transition-colors duration-300 ease-in-out hover:text-black-800 animate-fade-in hover:scale-105">
+                    Our mission is to streamline the aquaculture licensing process in Sri Lanka by providing an
+                    efficient,
+                    transparent, and user-friendly platform. We aim to empower local farmers and stakeholders by
+                    digitizing
+                    services offered by NAQDA, ensuring timely license issuance, data-driven decision-making, and
+                    sustainable aquaculture practices.
+                </p>
+            </section>
+
+            <!-- Vision Section -->
+            <section class="px-4 py-12 text-center text-dark hover:text-yellow-400">
+                <h2 class="text-2xl font-bold transition-colors duration-300 animate-fade-in hover:scale-105 text-dark">Our Vision
+                </h2>
+                <p
+                    class="mx-auto mt-4 max-w-2xl transition-colors duration-300 ease-in-out hover:text-black-800 text-slate-900 animate-fade-in hover:scale-105">
+                    To become Sri Lanka's leading digital platform for aquaculture regulation and support. By closely
+                    aligning
+                    with NAQDA's objectives, eAqua SL envisions a future where technology bridges the gap between
+                    government
+                    officers and aquaculture stakeholders, encouraging growth, compliance, and innovation in the
+                    fisheries sector.
+                </p>
+            </section>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="w-full bg-white" id="contact">
+        <div class="px-4 py-16 mx-auto max-w-7xl sm:px-6 lg:px-8 lg:py-20">
+            <div class="mb-4">
+                <div class="mb-6 max-w-3xl text-center sm:text-center md:mx-auto md:mb-12">
+                    <p class="text-base font-semibold tracking-wide uppercase text-slate-950">
+                        Contact
+                    </p>
+                    <h2
+                        class="mb-4 text-3xl font-bold tracking-tight text-gray-900 font-heading sm:text-5xl hover:text-yellow-600 hover:scale-105">
+                        Get in Touch with eAqua SL
+                    </h2>
+                    <p class="mx-auto mt-4 max-w-3xl text-xl text-black hover:text-yellow-900 hover:scale-105">
+                        Need help with aquaculture licensing or farm management? Reach out to the eAqua SL team—we're
+                        here to support sustainable aquaculture across Sri Lanka.
+                    </p>
+                </div>
+            </div>
+            <div class="flex justify-center items-stretch">
+                <div class="grid gap-8 md:grid-cols-2">
+                    <!-- Left Column (Contact Info) -->
+                    <div class="pr-6 h-full">
+                        <p class="mt-3 mb-12 text-lg text-black hover:text-gray-600 hover:scale-105 animate-fadeInUp">
+                            The eAqua SL platform, inspired by NAQDA, is your digital gateway to streamline aquaculture
+                            workflows, from license applications to farm monitoring. Connect with us to learn more or
+                            for any assistance.
+                        </p>
+                        <ul class="mb-6 md:mb-0">
+                            <li class="flex mb-4">
+                                <div
+                                    class="flex justify-center items-center w-10 h-10 text-gray-50 bg-blue-900 rounded">
+                                    <!-- Location icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="w-6 h-6">
+                                        <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
+                                        <path
+                                            d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <div class="mb-4 ml-4">
+                                    <h3
+                                        class="mb-2 text-lg font-medium text-gray-900 hover:text-yellow-500 hover:scale-105 animate-fadeInUp">
+                                        Our Office
+                                    </h3>
+                                    <p class="text-gray-600">eAqua SL Headquarters</p>
+                                    <p class="text-gray-600">Colombo, Sri Lanka</p>
+                                </div>
+                            </li>
+                            <li class="flex mb-4">
+                                <div
+                                    class="flex justify-center items-center w-10 h-10 text-gray-50 bg-blue-900 rounded">
+                                    <!-- Phone/email icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="w-6 h-6">
+                                        <path
+                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2">
+                                        </path>
+                                        <path d="M15 7a2 2 0 0 1 2 2"></path>
+                                        <path d="M15 3a6 6 0 0 1 6 6"></path>
+                                    </svg>
+                                </div>
+                                <div class="mb-4 ml-4">
+                                    <h3
+                                        class="mb-2 text-lg font-medium text-gray-900 hover:text-yellow-600 hover:scale-105 animate-fadeInUp">
+                                        Contact
+                                    </h3>
+                                    <p class="text-gray-600">Mobile: +94 71 123 4567</p>
+                                    <p class="text-gray-600">Email: support@eaqua-sl.gov.lk</p>
+                                </div>
+                            </li>
+                            <li class="flex mb-4">
+                                <div
+                                    class="flex justify-center items-center w-10 h-10 text-gray-50 bg-blue-900 rounded">
+                                    <!-- Clock icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="w-6 h-6">
+                                        <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
+                                        <path d="M12 7v5l3 3"></path>
+                                    </svg>
+                                </div>
+                                <div class="mb-4 ml-4">
+                                    <h3
+                                        class="mb-2 text-lg font-medium text-gray-900 hover:text-yellow-600 hover:scale-105 animate-fadeInUp">
+                                        Office Hours
+                                    </h3>
+                                    <p class="text-gray-600">Monday - Friday: 08:30 AM - 04:30 PM</p>
+                                    <p class="text-gray-600">Weekends & Public Holidays: Closed</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Right Column (Form) -->
+                    <div class="p-5 max-w-6xl card h-fit md:p-12" id="form animate-fadeInUp">
+                        <h2 class="mb-4 text-2xl font-bold dark:text-white hover:scale-105 animate-fadeInUp">
+                            Have Questions About Licensing or Farms?
+                        </h2>
+                        <form>
+                            <div class="mb-6">
+                                <div class="mx-0 mb-1 sm:mb-4">
+                                    <label for="name"
+                                        class="pb-1 text-xs tracking-wider uppercase animate-fadeInUp">Your Name</label>
+                                    <input type="text" id="name" placeholder="Your name"
+                                        class="py-2 pr-4 pl-2 mb-2 w-full rounded-md border border-gray-400 shadow-md dark:text-gray-300"
+                                        name="name">
+                                </div>
+                                <div class="mx-0 mb-1 sm:mb-4">
+                                    <label for="email"
+                                        class="pb-1 text-xs tracking-wider uppercase animate-fadeInUp">Your
+                                        Email</label>
+                                    <input type="email" id="email" placeholder="Your email"
+                                        class="py-2 pr-4 pl-2 mb-2 w-full rounded-md border border-gray-400 shadow-md dark:text-gray-300"
+                                        name="email">
+                                </div>
+                                <div class="mx-0 mb-1 sm:mb-4">
+                                    <label for="textarea"
+                                        class="pb-1 text-xs tracking-wider uppercase animate-fadeInUp">Your
+                                        Message</label>
+                                    <textarea id="textarea" name="textarea" cols="30" rows="5"
+                                        placeholder="Write your message..."
+                                        class="py-2 pr-4 pl-2 mb-2 w-full rounded-md border border-gray-400 shadow-md dark:text-gray-300"></textarea>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit"
+                                    class="px-6 py-3 w-full text-white bg-blue-800 rounded-md font-xl hover:scale-105">
+                                    Send Message
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

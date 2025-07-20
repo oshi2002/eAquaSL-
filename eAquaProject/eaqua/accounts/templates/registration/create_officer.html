@@ -1,0 +1,388 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Add New Officer | Admin Panel | eAqua SL{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --primary-gradient: linear-gradient(135deg, #2c3e50, #3498db);
+        --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        --input-focus: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        --transition: all 0.3s ease-in-out;
+    }
+    
+    .admin-card {
+        border-radius: 12px;
+        border: none;
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+    }
+    
+    .admin-header {
+        padding: 1rem;
+        background: var(--primary-gradient);
+        color: white;
+    }
+    
+    .form-section {
+        margin-bottom: 2.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .form-section:last-child {
+        border-bottom: none;
+    }
+    
+    .section-title {
+        display: flex;
+        align-items: center;
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid #e0e6ed;
+    }
+    
+    .form-label {
+        font-weight: 500;
+        color: #4a5568;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .form-control {
+        padding: 0.85rem 1.25rem;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        transition: var(--transition);
+        font-size: 0.95rem;
+    }
+    
+    .form-control:focus {
+        border-color: #3498db;
+        box-shadow: var(--input-focus);
+    }
+    
+    .input-group-text {
+        background-color: #f8fafc;
+        border-color: #e2e8f0;
+    }
+    
+    .btn-generate {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        background-color: #f8fafc;
+        border-color: #e2e8f0;
+        color: #4a5568;
+        transition: var(--transition);
+    }
+    
+    .btn-generate:hover {
+        background-color: #edf2f7;
+        color: #2d3748;
+    }
+    
+    .invalid-feedback {
+        font-size: 0.85rem;
+        margin-top: 0.35rem;
+    }
+    
+    .admin-hint {
+        font-size: 0.82rem;
+        color: #718096;
+        margin-top: 0.4rem;
+        line-height: 1.4;
+    }
+    
+    .btn-primary {
+        background: var(--primary-gradient);
+        border: none;
+        padding: 0.85rem 2rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        transition: var(--transition);
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    }
+    
+    .btn-outline-secondary {
+        padding: 0.85rem 2rem;
+        transition: var(--transition);
+    }
+    
+    .btn-outline-secondary:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .form-icon {
+        margin-right: 10px;
+        color: #3498db;
+        font-size: 1.1rem;
+        width: 24px;
+        text-align: center;
+    }
+    
+    @media (max-width: 768px) {
+        .admin-header {
+            padding: 1.25rem;
+        }
+        .form-control {
+            padding: 0.75rem 1rem;
+        }
+    }
+</style>
+
+<div class="container py-8">
+    <div class="row justify-content-center">
+        <div class="col-lg">
+            <div class="card admin-card mb-5">
+                <!-- Card Header -->
+                <div class="card-header admin-header">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-user-shield fa-2x me-1"></i>
+                        <div>
+                            <h4 class="h4 mb-1">Create New Officer Account</h4>
+                            <p class="mb-0 opacity-90">Add authorized personnel to the eAqua SL system</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Body -->
+                <div class="card-body p-4 p-md-5">
+                    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Officer Information Section -->
+                        <div class="form-section">
+                            <h5 class="section-title">
+                                <!-- <i class="fas fa-user-tie form-icon"></i> -->
+                                <span>Personal Information</span>
+                            </h5>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label for="{{ form.first_name.id_for_label }}" class="form-label">
+                                        <i class="fas fa-signature form-icon"></i>
+                                        First Name
+                                    </label>
+                                    {% render_field form.first_name class="form-control" placeholder="John" %}
+                                    <div class="invalid-feedback">
+                                        Please provide the officer's first name
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label for="{{ form.last_name.id_for_label }}" class="form-label">
+                                        <i class="fas fa-signature form-icon"></i>
+                                        Last Name
+                                    </label>
+                                    {% render_field form.last_name class="form-control" placeholder="Doe" %}
+                                    <div class="invalid-feedback">
+                                        Please provide the officer's last name
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label for="{{ form.username.id_for_label }}" class="form-label">
+                                        <i class="fas fa-at form-icon"></i>
+                                        Username
+                                    </label>
+                                    {% render_field form.username class="form-control" placeholder="johndoe" %}
+                                    {% if form.username.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.username.errors|join:", " }}
+                                        </div>
+                                    {% endif %}
+                                    <small class="admin-hint">
+                                        <i class="fas fa-info-circle mr-1"></i>
+                                        Will be used for system login (letters, numbers, underscores only)
+                                    </small>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label for="{{ form.email.id_for_label }}" class="form-label">
+                                        <i class="fas fa-envelope form-icon"></i>
+                                        Email Address
+                                    </label>
+                                    {% render_field form.email class="form-control" placeholder="john.doe@example.com" %}
+                                    {% if form.email.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.email.errors|join:", " }}
+                                        </div>
+                                    {% endif %}
+                                    <small class="admin-hint">
+                                        <i class="fas fa-info-circle mr-1"></i>
+                                        Official email address for notifications
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Security Section -->
+                        <div class="form-section">
+                            <h5 class="section-title">
+                                <!-- <i class="fas fa-shield-alt form-icon"></i> -->
+                                <span>Account Information</span>
+                            </h5>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label for="{{ form.password1.id_for_label }}" class="form-label">
+                                        <i class="fas fa-key form-icon"></i>
+                                        Password
+                                    </label>
+                                    <div class="input-group">
+                                        {% render_field form.password1 class="form-control" placeholder="Create secure password" %}
+                                        <div class="input-group-append">
+                                            <button class="btn btn-generate" type="button" id="generate-password" title="Generate secure password">
+                                                <i class="fas fa-random"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {% if form.password1.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.password1.errors|join:", " }}
+                                        </div>
+                                    {% endif %}
+                                    <small class="admin-hint">
+                                        <i class="fas fa-info-circle mr-1"></i>
+                                        Minimum 12 characters with mixed case, numbers, and symbols
+                                    </small>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label for="{{ form.password2.id_for_label }}" class="form-label">
+                                        <i class="fas fa-key form-icon"></i>
+                                        Confirm Password
+                                    </label>
+                                    {% render_field form.password2 class="form-control" placeholder="Re-enter password" %}
+                                    {% if form.password2.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.password2.errors|join:", " }}
+                                        </div>
+                                    {% endif %}
+                                    <small class="admin-hint">
+                                        <i class="fas fa-info-circle mr-1"></i>
+                                        Must match the password above
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-between align-items-center pt-3 mt-4">
+                            <a href="{% url 'manage_users' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left mr-2"></i> Back to List
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-user-plus mr-2"></i> Create Officer Account
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+<script>
+    // Enhanced Form Validation
+    (function() {
+        'use strict';
+        
+        // Fetch all forms with validation needs
+        const forms = document.querySelectorAll('.needs-validation');
+        
+        // Validate on submission
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    
+                    // Scroll to first invalid field
+                    const firstInvalid = form.querySelector('.is-invalid');
+                    if (firstInvalid) {
+                        firstInvalid.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'center' 
+                        });
+                    }
+                }
+                
+                form.classList.add('was-validated');
+            }, false);
+        });
+        
+        // Add real-time validation on blur
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('blur', () => {
+                if (input.checkValidity()) {
+                    input.classList.remove('is-invalid');
+                    input.classList.add('is-valid');
+                } else {
+                    input.classList.remove('is-valid');
+                    input.classList.add('is-invalid');
+                }
+            });
+        });
+    })();
+
+    // Password Generator with Strength Indicator
+    document.getElementById('generate-password').addEventListener('click', function() {
+        const specialChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+        const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+        const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const numbers = '0123456789';
+        
+        // Ensure at least one character from each set
+        let password = [
+            specialChars.charAt(Math.floor(Math.random() * specialChars.length)),
+            lowercase.charAt(Math.floor(Math.random() * lowercase.length)),
+            uppercase.charAt(Math.floor(Math.random() * uppercase.length)),
+            numbers.charAt(Math.floor(Math.random() * numbers.length))
+        ];
+        
+        // Fill remaining characters randomly
+        const allChars = specialChars + lowercase + uppercase + numbers;
+        for (let i = 0; i < 8; i++) {
+            password.push(allChars.charAt(Math.floor(Math.random() * allChars.length)));
+        }
+        
+        // Shuffle the array
+        password = password.sort(() => Math.random() - 0.5).join('');
+        
+        // Set password fields
+        document.getElementById('{{ form.password1.id_for_label }}').value = password;
+        document.getElementById('{{ form.password2.id_for_label }}').value = password;
+        
+        // Show generated alert
+        const toast = document.createElement('div');
+        toast.className = 'alert alert-success alert-dismissible fade show position-fixed';
+        toast.style.bottom = '20px';
+        toast.style.right = '20px';
+        toast.style.zIndex = '9999';
+        toast.innerHTML = `
+            <strong>Password Generated!</strong> A secure password has been created.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        `;
+        document.body.appendChild(toast);
+        
+        // Auto-dismiss after 3 seconds
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 150);
+        }, 3000);
+    });
+</script>
+{% endblock %}
